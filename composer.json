@@ -1,0 +1,37 @@
+{
+  "name": "tjlytle/tekbooth",
+  "description": "Photo Booth for php[tek]",
+  "minimum-stability": "dev",
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "edwbaker/GoProPHP",
+        "autoload": {
+          "classmap": ["./goprophp.php"]
+        },
+        "version": "1.0.0",
+        "source": {
+          "url": "https://github.com/edwbaker/GoProPHP",
+          "type": "git",
+          "reference": "master"
+        }
+      }
+    }
+  ],
+  "require": {
+    "edwbaker/GoProPHP": "1.0",
+    "guzzlehttp/guzzle": "^5.0@dev",
+    "paquettg/php-html-parser": "dev-master",
+    "pubnub/pubnub": "dev-master",
+    "knplabs/github-api": "^1.4@dev",
+    "mihaeu/html-formatter": "dev-master",
+    "pimple/pimple": "^3.0@dev",
+    "imagine/imagine": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "TekBooth\\": ["src/"]
+    }
+  }
+}

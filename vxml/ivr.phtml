@@ -1,0 +1,72 @@
+<?php echo "<?xml version='1.0' encoding='UTF-8' ?>" ?>
+
+<vxml version="2.1">
+    <form name="answer">
+        <property name="timeout" value="2"/>
+        <catch event="photo">
+            <data fetchhint="safe" name="dummy" src="ivr.php?<?php echo str_replace('&', '&amp;', http_build_query(['action' => 'photo', 'delay' => 0,'number' => $number, 'session' => $callid]))?>"/>
+        </catch>
+
+        <field name="start">
+            <prompt>
+                Hello. This is the Nex mo photo booth. If you can, put me on speaker.
+                Then press one when you're ready to have your photo taken.
+            </prompt>
+
+            <grammar xml:lang="en-US" root = "TOPLEVEL" mode="dtmf">
+                <rule id="TOPLEVEL" scope="public">
+                    <one-of>
+                        <item> 1 </item>
+                    </one-of>
+                </rule>
+            </grammar>
+
+            <filled>
+                <prompt>Smile really big!</prompt>
+                <data fetchhint="safe" name="dummy" src="ivr.php?<?php echo str_replace('&', '&amp;', http_build_query(['action' => 'photo', 'delay' => 3,'number' => $number, 'session' => $callid]))?>"/>
+                <break time="2000" />
+                <prompt>Perfect! Now get really close.</prompt>
+                <break time="2000" />
+                <prompt>That's nice, let me press the button. Say PHP!</prompt>
+            </filled>
+        </field>
+
+        <field name="therest">
+            <grammar xml:lang="en-US" root = "TOPLEVEL" mode="dtmf">
+                <rule id="TOPLEVEL" scope="public">
+                    <one-of>
+                        <item> 1 </item>
+                    </one-of>
+                </rule>
+            </grammar>
+
+            <noinput>
+                <break time="2000" />
+                Love it! Make a funny face.
+                <break time="2000" />
+                I know you can make a funnier face.
+                <break time="2000" />
+                Ha. Ha.
+                <break time="1000" />
+                <throw event="photo" />
+            </noinput>
+
+            <noinput count="2">
+                <break time="2000" />
+                I think I got that one. Yes. It looks nice. Okay, one more now. Take a step back and wave!
+                <break time="2000" />
+                <throw event="photo" />
+            </noinput>
+
+            <noinput count="3">
+                Thanks!
+                <throw event="photo" />
+            </noinput>
+
+            <noinput count="4">
+                <exit />
+            </noinput>
+
+        </field>
+    </form>
+</vxml>
