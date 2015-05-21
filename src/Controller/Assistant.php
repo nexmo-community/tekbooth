@@ -1,5 +1,6 @@
 <?php
 namespace TekBooth\Controller;
+use Nexmo\Sms;
 use Pubnub\Pubnub;
 
 /**
@@ -23,10 +24,28 @@ class Assistant
      */
     protected $vxmlPath;
 
-    public function __construct(Pubnub $pubnub, $vxmlPath)
+    /**
+     * @var Sms
+     */
+    protected $sms;
+
+    /**
+     * @var string
+     */
+    protected $web;
+
+    /**
+     * @var string
+     */
+    protected $from;
+
+    public function __construct(Pubnub $pubnub, Sms $sms, $from, $vxmlPath, $web)
     {
         $this->pubnub = $pubnub;
         $this->vxmlPath = $vxmlPath;
+        $this->sms = $sms;
+        $this->web = $web;
+        $this->from = $from;
     }
 
     public function getVxml($number, $callid)
@@ -44,5 +63,14 @@ class Assistant
         ]);
 
         $this->pubnub->publish('tekbooth', $data);
+    }
+
+    public function sendLink($number, $callid)
+    {
+        $this->sms->send([
+            'to' => $number,
+            'from' => $this->from,
+            'text' => 'Get your photos here: ' . $this->web . '/' . $callid . '.html'
+        ]);
     }
 }

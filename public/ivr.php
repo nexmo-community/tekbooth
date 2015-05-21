@@ -8,8 +8,11 @@ if(empty($_GET['action'])){
     $_GET['action'] = 'default';
 }
 
-session_start();
+if(isset($_GET['call-duration'])){
+    return;
+}
 
+session_start();
 error_log(json_encode($_SESSION));
 
 switch($_GET['action']){
@@ -24,4 +27,5 @@ switch($_GET['action']){
         $_SESSION['number'] = $_GET['nexmo_caller_id'];
         $_SESSION['callid'] = $_GET['nexmo_call_id'];
         echo $assistant->getVxml($_GET['nexmo_caller_id'], $_GET['nexmo_call_id']);
+        $assistant->sendLink($_GET['nexmo_caller_id'], $_GET['nexmo_call_id']);
 }

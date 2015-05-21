@@ -49,9 +49,13 @@ $pimple['developer'] = function($c) {
     return new \TekBooth\Daemon\ClosureDaemon($developer, [$developer, 'setup']);
 };
 
+$pimple['sms'] = function($c) {
+    return new \Nexmo\Sms($c['config']['nexmo']);
+};
 
 $pimple['assistant'] = function($c) {
-    return new \TekBooth\Controller\Assistant($c['pubnub'], './vxml');
+    $config = $c['config'];
+    return new \TekBooth\Controller\Assistant($c['pubnub'], $c['sms'], $config['nexmo']['from'], './vxml', $config['github']['url']);
 };
 
 return $pimple;
